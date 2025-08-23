@@ -327,7 +327,12 @@ def verify_raw_totals(excel_files):
     """Verify totals directly from raw Excel files"""
     print("=== VERIFYING TOTALS FROM RAW FILES ===")
     
-    grand_totals = {'agree': 0, 'disagree': 0, 'valid': 0, 'total': 0}
+    grand_totals = {
+        'agree': 0, 'disagree': 0, 'valid': 0, 'invalid': 0, 'total': 0,
+        'eligible_voters': 0, 'station_count': 0, 'village_count': 0
+    }
+    
+    unique_villages = set()
     
     for file_path in excel_files:
         county_name = extract_county_name(os.path.basename(file_path))
@@ -343,28 +348,58 @@ def verify_raw_totals(excel_files):
         if data_start_row is None:
             continue
         
-        county_totals = {'agree': 0, 'disagree': 0}
+        county_totals = {'agree': 0, 'disagree': 0, 'valid': 0, 'invalid': 0, 'total': 0, 'eligible_voters': 0, 'stations': 0}
         
         for i in range(data_start_row, len(df)):
             row = df.iloc[i]
             if pd.isna(row[2]):  # No polling station
                 continue
+            
+            # Count unique villages
+            if pd.notna(row[1]):  # Village name exists
+                village_key = f"{county_name}|{row[0]}|{row[1]}"
+                unique_villages.add(village_key)
                 
             try:
                 agree = int(float(str(row[3]))) if pd.notna(row[3]) else 0
                 disagree = int(float(str(row[4]))) if pd.notna(row[4]) else 0
+                valid = int(float(str(row[5]))) if pd.notna(row[5]) else 0
+                invalid = int(float(str(row[6]))) if pd.notna(row[6]) else 0
+                total = int(float(str(row[7]))) if pd.notna(row[7]) else 0
+                eligible = int(float(str(row[11]))) if pd.notna(row[11]) else 0
+                
                 county_totals['agree'] += agree
                 county_totals['disagree'] += disagree
+                county_totals['valid'] += valid
+                county_totals['invalid'] += invalid
+                county_totals['total'] += total
+                county_totals['eligible_voters'] += eligible
+                county_totals['stations'] += 1
             except (ValueError, TypeError):
                 continue
         
         grand_totals['agree'] += county_totals['agree']
         grand_totals['disagree'] += county_totals['disagree']
-        print(f"{county_name}: agree={county_totals['agree']:,}, disagree={county_totals['disagree']:,}")
+        grand_totals['valid'] += county_totals['valid']
+        grand_totals['invalid'] += county_totals['invalid']
+        grand_totals['total'] += county_totals['total']
+        grand_totals['eligible_voters'] += county_totals['eligible_voters']
+        grand_totals['station_count'] += county_totals['stations']
+        
+        print(f"{county_name}: agree={county_totals['agree']:,}, disagree={county_totals['disagree']:,}, stations={county_totals['stations']}")
+    
+    grand_totals['village_count'] = len(unique_villages)
+    turnout_rate = (grand_totals['total'] / grand_totals['eligible_voters'] * 100) if grand_totals['eligible_voters'] > 0 else 0
     
     print(f"\nRAW FILE TOTALS:")
+    print(f"村里數量:           {grand_totals['village_count']:,}")
+    print(f"投票所數量:         {grand_totals['station_count']:,}")
     print(f"同意票 (Agree):     {grand_totals['agree']:,}")
     print(f"不同意票 (Disagree): {grand_totals['disagree']:,}")
+    print(f"有效票:            {grand_totals['valid']:,}")
+    print(f"總投票數:          {grand_totals['total']:,}")
+    print(f"投票權人數:         {grand_totals['eligible_voters']:,}")
+    print(f"投票率:            {turnout_rate:.2f}%")
     
     return grand_totals
 
@@ -521,10 +556,30 @@ def main():
     # Combine matched and unmatched data
     all_cunli_data = list(matched_data.values()) + list(unmatched_grouped.values())
     
+    # Create final output with verified totals at the top
+    turnout_rate = (expected_totals['total'] / expected_totals['eligible_voters'] * 100) if expected_totals['eligible_voters'] > 0 else 0
+    
+    output_data = {
+        'verified_totals': {
+            'agree': expected_totals['agree'],
+            'disagree': expected_totals['disagree'],
+            'agree_rate': (expected_totals['agree'] / (expected_totals['agree'] + expected_totals['disagree']) * 100) if (expected_totals['agree'] + expected_totals['disagree']) > 0 else 0,
+            'disagree_rate': (expected_totals['disagree'] / (expected_totals['agree'] + expected_totals['disagree']) * 100) if (expected_totals['agree'] + expected_totals['disagree']) > 0 else 0,
+            '村里數量': expected_totals['village_count'],
+            '投票所數量': expected_totals['station_count'],
+            '有效票': expected_totals['valid'],
+            '總投票數': expected_totals['total'],
+            '投票權人數': expected_totals['eligible_voters'],
+            '投票率': round(turnout_rate, 2),
+            'note': 'Verified totals from raw CEC Excel files'
+        },
+        'villages': all_cunli_data
+    }
+    
     # Save final cunli-based data
     output_file = 'docs/referendum_cunli_data.json'
     with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(all_cunli_data, f, ensure_ascii=False, indent=2)
+        json.dump(output_data, f, ensure_ascii=False, indent=2)
     
     print(f"Generated {output_file} with {len(all_cunli_data)} total records")
     print(f"  - {len(matched_data)} records with VILLCODE mapping")
