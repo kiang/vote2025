@@ -357,7 +357,7 @@ def main():
     cunli_data = list(matched_data.values())
     
     # Save final cunli-based data
-    output_file = 'referendum_cunli_data.json'
+    output_file = 'docs/referendum_cunli_data.json'
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(cunli_data, f, ensure_ascii=False, indent=2)
     
