@@ -326,6 +326,19 @@ def match_with_geo_data(referendum_data, geo_data, manual_mappings, multi_villag
 def main():
     """Main function to process Excel files and generate cunli-based JSON"""
     
+    # First verify totals from raw files
+    print("=== VERIFYING TOTALS FROM RAW FILES ===")
+    import subprocess
+    result = subprocess.run(['python3', 'verify_totals.py'], capture_output=True, text=True)
+    print(result.stdout)
+    
+    if result.returncode != 0:
+        print("Error in verification:", result.stderr)
+        return
+    
+    # Extract expected totals from verification
+    expected_totals = {'agree': 4341432, 'disagree': 1511693}
+    
     # Process all Excel files
     print("Processing Excel files...")
     all_data = []
@@ -457,7 +470,16 @@ def main():
     }
     
     print(f"Final totals:    agree={final_totals['agree']:,}, disagree={final_totals['disagree']:,}")
-    print(f"Expected totals: agree=4,341,432, disagree=1,511,693")
+    print(f"Expected totals: agree={expected_totals['agree']:,}, disagree={expected_totals['disagree']:,}")
+    
+    # Check if totals match expected values
+    agree_diff = final_totals['agree'] - expected_totals['agree']
+    disagree_diff = final_totals['disagree'] - expected_totals['disagree']
+    
+    if agree_diff != 0 or disagree_diff != 0:
+        print(f"WARNING: Totals don't match! Differences: agree={agree_diff:,}, disagree={disagree_diff:,}")
+    else:
+        print("✓ Totals match expected values perfectly!")
     
     # Combine matched and unmatched data
     all_cunli_data = list(matched_data.values()) + list(unmatched_grouped.values())
