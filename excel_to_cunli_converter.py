@@ -174,12 +174,13 @@ def match_with_geo_data(referendum_data, geo_data, manual_mappings, multi_villag
         if lookup_key in manual_mappings:
             villcode = manual_mappings[lookup_key]
         elif lookup_key in multi_village_mappings:
-            # Handle multi-village case - distribute data across all villcodes
+            # Handle multi-village case - distribute data proportionally
             multi_data = multi_village_mappings[lookup_key]
             villcodes = multi_data['villcodes']
+            num_villages = len(villcodes)
             
-            # Distribute the polling station data equally across all villcodes
-            for vc in villcodes:
+            # Distribute the polling station data proportionally across villcodes
+            for i, vc in enumerate(villcodes):
                 if vc not in matched_data:
                     matched_data[vc] = {
                         'villcode': vc,
@@ -203,7 +204,7 @@ def match_with_geo_data(referendum_data, geo_data, manual_mappings, multi_villag
                         'station_count': 0
                     }
                 
-                # Add the full polling station data to each villcode
+                # Add the polling station data to each villcode
                 matched_data[vc]['polling_stations'].append({
                     'station_id': record['polling_station'],
                     'votes': record['votes'],
@@ -211,22 +212,23 @@ def match_with_geo_data(referendum_data, geo_data, manual_mappings, multi_villag
                     'eligible_voters': record['eligible_voters'],
                     'turnout_rate': record['turnout_rate'],
                     'shared_station': True,
-                    'shared_with_villages': len(villcodes)
+                    'shared_with_villages': num_villages
                 })
                 
-                # Add full totals to each villcode (will be the same for all)
-                matched_data[vc]['total_votes']['agree'] += record['votes']['agree']
-                matched_data[vc]['total_votes']['disagree'] += record['votes']['disagree']
-                matched_data[vc]['total_votes']['valid'] += record['votes']['valid']
-                matched_data[vc]['total_votes']['invalid'] += record['votes']['invalid']
-                matched_data[vc]['total_votes']['total'] += record['votes']['total']
+                # Add proportional totals (divide by number of villages to avoid double counting)
+                vote_share = 1.0 / num_villages
+                matched_data[vc]['total_votes']['agree'] += int(record['votes']['agree'] * vote_share)
+                matched_data[vc]['total_votes']['disagree'] += int(record['votes']['disagree'] * vote_share)
+                matched_data[vc]['total_votes']['valid'] += int(record['votes']['valid'] * vote_share)
+                matched_data[vc]['total_votes']['invalid'] += int(record['votes']['invalid'] * vote_share)
+                matched_data[vc]['total_votes']['total'] += int(record['votes']['total'] * vote_share)
                 
-                matched_data[vc]['total_ballots']['unused'] += record['ballots']['unused']
-                matched_data[vc]['total_ballots']['issued'] += record['ballots']['issued']
-                matched_data[vc]['total_ballots']['remaining'] += record['ballots']['remaining']
+                matched_data[vc]['total_ballots']['unused'] += int(record['ballots']['unused'] * vote_share)
+                matched_data[vc]['total_ballots']['issued'] += int(record['ballots']['issued'] * vote_share)
+                matched_data[vc]['total_ballots']['remaining'] += int(record['ballots']['remaining'] * vote_share)
                 
-                matched_data[vc]['total_eligible_voters'] += record['eligible_voters']
-                matched_data[vc]['station_count'] += 1
+                matched_data[vc]['total_eligible_voters'] += int(record['eligible_voters'] * vote_share)
+                matched_data[vc]['station_count'] += vote_share
             
             continue  # Skip the normal processing for this record
         else:
@@ -356,13 +358,119 @@ def main():
     # Convert to list format for JSON output
     cunli_data = list(matched_data.values())
     
+    # Check if all data is accounted for by comparing totals
+    print("Verifying data completeness...")
+    original_totals = {
+        'agree': sum(r['votes']['agree'] for r in all_data if r['polling_station']),
+        'disagree': sum(r['votes']['disagree'] for r in all_data if r['polling_station']),
+        'valid': sum(r['votes']['valid'] for r in all_data if r['polling_station']),
+        'total': sum(r['votes']['total'] for r in all_data if r['polling_station'])
+    }
+    
+    matched_totals = {
+        'agree': sum(v['total_votes']['agree'] for v in matched_data.values()),
+        'disagree': sum(v['total_votes']['disagree'] for v in matched_data.values()),
+        'valid': sum(v['total_votes']['valid'] for v in matched_data.values()),
+        'total': sum(v['total_votes']['total'] for v in matched_data.values())
+    }
+    
+    print(f"Original totals: agree={original_totals['agree']:,}, disagree={original_totals['disagree']:,}")
+    print(f"Matched totals:  agree={matched_totals['agree']:,}, disagree={matched_totals['disagree']:,}")
+    
+    # Find truly unmatched records and add them
+    unmatched_grouped = {}
+    matched_stations = set()
+    
+    # Collect all matched station IDs
+    for villcode, data in matched_data.items():
+        for station in data['polling_stations']:
+            station_key = f"{data['county']}|{data['district']}|{data['village']}|{station['station_id']}"
+            matched_stations.add(station_key)
+    
+    # Find unmatched polling stations
+    for data_record in all_data:
+        if not data_record['village'] or not data_record['polling_station']:
+            continue
+            
+        county = clean_field(data_record['county'])
+        district = clean_field(data_record['district'])
+        village = clean_field(data_record['village'])
+        station_key = f"{county}|{district}|{village}|{data_record['polling_station']}"
+        
+        if station_key not in matched_stations:
+            lookup_key = f"{county}|{district}|{village}"
+            
+            if lookup_key not in unmatched_grouped:
+                unmatched_grouped[lookup_key] = {
+                    'villcode': None,
+                    'county': county,
+                    'district': district,
+                    'village': village,
+                    'polling_stations': [],
+                    'total_votes': {'agree': 0, 'disagree': 0, 'valid': 0, 'invalid': 0, 'total': 0},
+                    'total_ballots': {'unused': 0, 'issued': 0, 'remaining': 0},
+                    'total_eligible_voters': 0,
+                    'station_count': 0
+                }
+            
+            # Add polling station data
+            unmatched_grouped[lookup_key]['polling_stations'].append({
+                'station_id': data_record['polling_station'],
+                'votes': data_record['votes'],
+                'ballots': data_record['ballots'],
+                'eligible_voters': data_record['eligible_voters'],
+                'turnout_rate': data_record['turnout_rate']
+            })
+            
+            # Aggregate totals
+            unmatched_grouped[lookup_key]['total_votes']['agree'] += data_record['votes']['agree']
+            unmatched_grouped[lookup_key]['total_votes']['disagree'] += data_record['votes']['disagree']
+            unmatched_grouped[lookup_key]['total_votes']['valid'] += data_record['votes']['valid']
+            unmatched_grouped[lookup_key]['total_votes']['invalid'] += data_record['votes']['invalid']
+            unmatched_grouped[lookup_key]['total_votes']['total'] += data_record['votes']['total']
+            
+            unmatched_grouped[lookup_key]['total_ballots']['unused'] += data_record['ballots']['unused']
+            unmatched_grouped[lookup_key]['total_ballots']['issued'] += data_record['ballots']['issued']
+            unmatched_grouped[lookup_key]['total_ballots']['remaining'] += data_record['ballots']['remaining']
+            
+            unmatched_grouped[lookup_key]['total_eligible_voters'] += data_record['eligible_voters']
+            unmatched_grouped[lookup_key]['station_count'] += 1
+    
+    # Calculate turnout rates for unmatched data
+    for key in unmatched_grouped:
+        data = unmatched_grouped[key]
+        if data['total_eligible_voters'] > 0:
+            data['turnout_rate'] = (data['total_votes']['total'] / data['total_eligible_voters']) * 100
+        else:
+            data['turnout_rate'] = 0.0
+    
+    unmatched_totals = {
+        'agree': sum(v['total_votes']['agree'] for v in unmatched_grouped.values()),
+        'disagree': sum(v['total_votes']['disagree'] for v in unmatched_grouped.values())
+    }
+    
+    print(f"Unmatched totals: agree={unmatched_totals['agree']:,}, disagree={unmatched_totals['disagree']:,}")
+    
+    final_totals = {
+        'agree': matched_totals['agree'] + unmatched_totals['agree'],
+        'disagree': matched_totals['disagree'] + unmatched_totals['disagree']
+    }
+    
+    print(f"Final totals:    agree={final_totals['agree']:,}, disagree={final_totals['disagree']:,}")
+    print(f"Expected totals: agree=4,341,432, disagree=1,511,693")
+    
+    # Combine matched and unmatched data
+    all_cunli_data = list(matched_data.values()) + list(unmatched_grouped.values())
+    
     # Save final cunli-based data
     output_file = 'docs/referendum_cunli_data.json'
     with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(cunli_data, f, ensure_ascii=False, indent=2)
+        json.dump(all_cunli_data, f, ensure_ascii=False, indent=2)
     
-    print(f"Generated {output_file} with {len(cunli_data)} cunli records")
-    print(f"Match rate: {len(matched_data)}/{len(matched_data) + len(set(r['lookup_key'] for r in unmatched_records))} villages")
+    print(f"Generated {output_file} with {len(all_cunli_data)} total records")
+    print(f"  - {len(matched_data)} records with VILLCODE mapping")
+    print(f"  - {len(unmatched_grouped)} records without VILLCODE (included for completeness)")
+    print(f"Match rate: {len(matched_data)}/{len(matched_data) + len(unmatched_grouped)} villages")
     
     # Save unmatched records if any
     if unmatched_records:
