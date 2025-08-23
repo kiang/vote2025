@@ -1,0 +1,51 @@
+[
+  {
+    "county": "臺南市",
+    "district": "西港區",
+    "village": "檨林里",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "臺南市",
+    "district": "安南區",
+    "village": "南里",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "臺南市",
+    "district": "安南區",
+    "village": "公里",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "屏東縣",
+    "district": "瑪家鄉",
+    "village": "三和村",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "連江縣",
+    "district": "莒光鄉",
+    "village": "青帆村、田沃村、西坵村",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "連江縣",
+    "district": "莒光鄉",
+    "village": "福正村、大坪村",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "連江縣",
+    "district": "東引鄉",
+    "village": "中柳村、樂華村",
+    "suggested_villcode": "",
+    "notes": "Needs manual VILLCODE mapping"
+  }
+]

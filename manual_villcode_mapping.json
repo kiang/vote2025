@@ -1,0 +1,205 @@
+[
+  {
+    "county": "臺中市",
+    "district": "大安區",
+    "village": "龜?里",
+    "suggested_villcode": "66000220004",
+    "notes": "Character encoding issue with village name"
+  },
+  {
+    "county": "澎湖縣",
+    "district": "馬公市",
+    "village": "嵵裡里",
+    "suggested_villcode": "10016010031",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "臺南市",
+    "district": "西港區",
+    "village": "檨林里",
+    "suggested_villcode": "67000140004",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "臺南市",
+    "district": "安南區",
+    "village": "南里",
+    "suggested_villcode": "67000350003",
+    "notes": "Short village name may have matching issues"
+  },
+  {
+    "county": "臺南市",
+    "district": "安南區",
+    "village": "公里",
+    "suggested_villcode": "67000350024",
+    "notes": "Short village name may have matching issues"
+  },
+  {
+    "county": "臺南市",
+    "district": "新化區",
+    "village": "𦰡拔里",
+    "suggested_villcode": "67000180018",
+    "notes": "Unicode character in village name"
+  },
+  {
+    "county": "臺南市",
+    "district": "龍崎區",
+    "village": "石𥕢里",
+    "suggested_villcode": "67000300008",
+    "notes": "Unicode character in village name"
+  },
+  {
+    "county": "彰化縣",
+    "district": "彰化市",
+    "village": "磚磘里",
+    "suggested_villcode": "10007010030",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "彰化縣",
+    "district": "埔鹽鄉",
+    "village": "瓦磘村",
+    "suggested_villcode": "10007140010",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "嘉義市",
+    "district": "西區",
+    "village": "磚磘里",
+    "suggested_villcode": "10020020018",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "南投縣",
+    "district": "魚池鄉",
+    "village": "新城村、共和村",
+    "suggested_villcode": "10008090004,10008090007",
+    "notes": "Multiple villages combined in one polling station"
+  },
+  {
+    "county": "南投縣",
+    "district": "竹山鎮",
+    "village": "硘磘里",
+    "suggested_villcode": "10008040005",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "屏東縣",
+    "district": "新園鄉",
+    "village": "瓦磘村",
+    "suggested_villcode": "10013170001",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "屏東縣",
+    "district": "瑪家鄉",
+    "village": "三和村",
+    "suggested_villcode": "",
+    "notes": "May need exact match verification"
+  },
+  {
+    "county": "新北市",
+    "district": "樹林區",
+    "village": "獇寮里",
+    "suggested_villcode": "65000070007",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "新北市",
+    "district": "中和區",
+    "village": "瓦磘里",
+    "suggested_villcode": "65000030017",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "新北市",
+    "district": "中和區",
+    "village": "灰磘里",
+    "suggested_villcode": "65000030054",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "新北市",
+    "district": "坪林區",
+    "village": "石𥕢里",
+    "suggested_villcode": "65000200004",
+    "notes": "Unicode character in village name"
+  },
+  {
+    "county": "新北市",
+    "district": "瑞芳區",
+    "village": "濓洞里",
+    "suggested_villcode": "65000120028",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "新北市",
+    "district": "瑞芳區",
+    "village": "濓新里",
+    "suggested_villcode": "65000120027",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "雲林縣",
+    "district": "麥寮鄉",
+    "village": "瓦磘村",
+    "suggested_villcode": "10009130003",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "雲林縣",
+    "district": "四湖鄉",
+    "village": "萡子村",
+    "suggested_villcode": "10009180016",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "雲林縣",
+    "district": "四湖鄉",
+    "village": "萡東村",
+    "suggested_villcode": "10009180021",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "雲林縣",
+    "district": "元長鄉",
+    "village": "瓦磘村",
+    "suggested_villcode": "10009170018",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "雲林縣",
+    "district": "水林鄉",
+    "village": "瓊埔村",
+    "suggested_villcode": "10009200021",
+    "notes": "Special character in village name"
+  },
+  {
+    "county": "連江縣",
+    "district": "南竿鄉",
+    "village": "馬祖村、珠螺村、四維村",
+    "suggested_villcode": "09007010007,09007010008,09007010009",
+    "notes": "Multiple villages combined in one polling station"
+  },
+  {
+    "county": "連江縣",
+    "district": "南竿鄉",
+    "village": "仁愛村、津沙村",
+    "suggested_villcode": "09007010005,09007010006",
+    "notes": "Multiple villages combined in one polling station"
+  },
+  {
+    "county": "連江縣",
+    "district": "北竿鄉",
+    "village": "塘岐村、后沃村",
+    "suggested_villcode": "09007020001,09007020002",
+    "notes": "Multiple villages combined in one polling station"
+  },
+  {
+    "county": "連江縣",
+    "district": "北竿鄉",
+    "village": "橋仔村、芹壁村、坂里村、白沙村",
+    "suggested_villcode": "09007020003,09007020004,09007020005,09007020006",
+    "notes": "Multiple villages combined in one polling station"
+  }
+]
