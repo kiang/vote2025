@@ -323,26 +323,63 @@ def match_with_geo_data(referendum_data, geo_data, manual_mappings, multi_villag
     
     return matched_data, unmatched_records
 
+def verify_raw_totals(excel_files):
+    """Verify totals directly from raw Excel files"""
+    print("=== VERIFYING TOTALS FROM RAW FILES ===")
+    
+    grand_totals = {'agree': 0, 'disagree': 0, 'valid': 0, 'total': 0}
+    
+    for file_path in excel_files:
+        county_name = extract_county_name(os.path.basename(file_path))
+        df = pd.read_excel(file_path, header=None)
+        
+        # Find data start row
+        data_start_row = None
+        for i, row in df.iterrows():
+            if pd.notna(row[0]) and ('總' in str(row[0]) and '計' in str(row[0])):
+                data_start_row = i
+                break
+        
+        if data_start_row is None:
+            continue
+        
+        county_totals = {'agree': 0, 'disagree': 0}
+        
+        for i in range(data_start_row, len(df)):
+            row = df.iloc[i]
+            if pd.isna(row[2]):  # No polling station
+                continue
+                
+            try:
+                agree = int(float(str(row[3]))) if pd.notna(row[3]) else 0
+                disagree = int(float(str(row[4]))) if pd.notna(row[4]) else 0
+                county_totals['agree'] += agree
+                county_totals['disagree'] += disagree
+            except (ValueError, TypeError):
+                continue
+        
+        grand_totals['agree'] += county_totals['agree']
+        grand_totals['disagree'] += county_totals['disagree']
+        print(f"{county_name}: agree={county_totals['agree']:,}, disagree={county_totals['disagree']:,}")
+    
+    print(f"\nRAW FILE TOTALS:")
+    print(f"同意票 (Agree):     {grand_totals['agree']:,}")
+    print(f"不同意票 (Disagree): {grand_totals['disagree']:,}")
+    
+    return grand_totals
+
 def main():
     """Main function to process Excel files and generate cunli-based JSON"""
     
+    # Get Excel files
+    excel_files = glob.glob('raw/*.xlsx')
+    
     # First verify totals from raw files
-    print("=== VERIFYING TOTALS FROM RAW FILES ===")
-    import subprocess
-    result = subprocess.run(['python3', 'verify_totals.py'], capture_output=True, text=True)
-    print(result.stdout)
-    
-    if result.returncode != 0:
-        print("Error in verification:", result.stderr)
-        return
-    
-    # Extract expected totals from verification
-    expected_totals = {'agree': 4341432, 'disagree': 1511693}
+    expected_totals = verify_raw_totals(excel_files)
     
     # Process all Excel files
-    print("Processing Excel files...")
+    print("\nProcessing Excel files for detailed data...")
     all_data = []
-    excel_files = glob.glob('raw/*.xlsx')
     
     for file_path in excel_files:
         print(f"Processing: {file_path}")
