@@ -47,5 +47,277 @@
     "village": "中柳村、樂華村",
     "suggested_villcode": "",
     "notes": "Needs manual VILLCODE mapping"
+  },
+  {
+    "county": "臺東縣",
+    "district": "臺東市",
+    "village": "仁和里",
+    "villcode": "10014010047",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "臺東縣",
+    "district": "臺東市",
+    "village": "豐安里",
+    "villcode": "10014010048",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "臺東縣",
+    "district": "臺東市",
+    "village": "豐盛里",
+    "villcode": "10014010049",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "臺南市",
+    "district": "安南區",
+    "village": "媽祖宮里",
+    "villcode": "67000350052",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "臺南市",
+    "district": "關廟區",
+    "village": "龜洞里",
+    "villcode": "67000290020",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "彰化縣",
+    "district": "鹿港鎮",
+    "village": "鹿東里",
+    "villcode": "10007020031",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "彰化縣",
+    "district": "鹿港鎮",
+    "village": "鹿和里",
+    "villcode": "10007020030",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "彰化縣",
+    "district": "埤頭鄉",
+    "village": "永豐村",
+    "villcode": "10007220018",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "南投縣",
+    "district": "仁愛鄉",
+    "village": "德鹿谷村",
+    "villcode": "10008130017",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "南投縣",
+    "district": "信義鄉",
+    "village": "卡里布安村",
+    "villcode": "10008120015",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "桃園區",
+    "village": "檜樂里",
+    "villcode": "68000010081",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "桃園區",
+    "village": "寶民里",
+    "villcode": "68000010082",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "桃園區",
+    "village": "經國里",
+    "villcode": "68000010080",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "大園區",
+    "village": "青峰里",
+    "villcode": "68000060020",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "大園區",
+    "village": "青山里",
+    "villcode": "68000060021",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "中壢區",
+    "village": "興華里",
+    "villcode": "68000020087",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "中壢區",
+    "village": "興福里",
+    "villcode": "68000020088",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "中壢區",
+    "village": "青溪里",
+    "villcode": "68000020086",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "龍潭區",
+    "village": "渴望里",
+    "villcode": "68000090033",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "八德區",
+    "village": "興中里",
+    "villcode": "68000080051",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "八德區",
+    "village": "福元里",
+    "villcode": "68000080049",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "桃園市",
+    "district": "八德區",
+    "village": "福德里",
+    "villcode": "68000080050",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "屏東市",
+    "village": "豐年里",
+    "villcode": "10013010082",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "屏東市",
+    "village": "崇陽里",
+    "villcode": "10013010083",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "屏東市",
+    "village": "公園里",
+    "villcode": "10013010084",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "東港鎮",
+    "village": "內關帝里",
+    "villcode": "10013030025",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "東港鎮",
+    "village": "東新里",
+    "villcode": "10013030026",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "東港鎮",
+    "village": "新街里",
+    "villcode": "10013030027",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "東港鎮",
+    "village": "東光里",
+    "villcode": "10013030028",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "東港鎮",
+    "village": "福德里",
+    "villcode": "10013030023",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "屏東縣",
+    "district": "東港鎮",
+    "village": "東津里",
+    "villcode": "10013030024",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "花蓮縣",
+    "district": "新城鄉",
+    "village": "新秀村",
+    "villcode": "10015040009",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "花蓮縣",
+    "district": "吉安鄉",
+    "village": "吉昌村",
+    "villcode": "10015050019",
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
+  },
+  {
+    "county": "南投縣",
+    "district": "魚池鄉",
+    "village": "新城村",
+    "villcode": null,
+    "suggested_villcode": "",
+    "notes": "Missing in 2021 dataset (case 17)"
   }
 ]
